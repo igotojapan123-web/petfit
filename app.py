@@ -20,9 +20,28 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-    * { font-family: 'Inter', sans-serif; }
-    .stApp { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); }
+    * {
+        font-family: 'Inter', sans-serif;
+        box-sizing: border-box;
+    }
+
+    html, body, .stApp {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
+    .stApp {
+        background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
     #MainMenu, footer, header { visibility: hidden; }
+
+    /* Main container */
+    .main .block-container {
+        max-width: 100% !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        overflow-x: hidden !important;
+    }
 
     /* Premium Button Styles */
     .stButton > button {
@@ -31,6 +50,7 @@ st.markdown("""
         padding: 12px 28px;
         transition: all 0.3s ease;
         box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        white-space: nowrap;
     }
     .stButton > button:hover {
         transform: translateY(-2px);
@@ -43,25 +63,31 @@ st.markdown("""
         justify-content: center;
         align-items: center;
         gap: 0;
-        margin: 40px 0;
+        margin: 40px auto;
+        max-width: 100%;
+        overflow-x: auto;
+        padding: 10px 0;
+        flex-wrap: wrap;
     }
     .step {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 0 40px;
+        padding: 0 20px;
+        min-width: 100px;
     }
     .step-circle {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 700;
         margin-bottom: 12px;
         transition: all 0.3s ease;
+        flex-shrink: 0;
     }
     .step-circle.active {
         background: linear-gradient(135deg, #5bb5e0 0%, #3a9fd1 100%);
@@ -77,20 +103,25 @@ st.markdown("""
         color: white;
     }
     .step-label {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 600;
         color: #1a1a1a;
+        text-align: center;
+        white-space: nowrap;
     }
     .step-desc {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         color: #888;
         margin-top: 4px;
+        text-align: center;
+        white-space: nowrap;
     }
     .step-line {
-        width: 80px;
+        width: 50px;
         height: 3px;
         background: #e8ecef;
         margin-bottom: 30px;
+        flex-shrink: 0;
     }
     .step-line.completed {
         background: linear-gradient(90deg, #10b981, #5bb5e0);
@@ -100,22 +131,22 @@ st.markdown("""
     .premium-card {
         background: white;
         border-radius: 20px;
-        padding: 32px;
+        padding: 24px;
         box-shadow: 0 4px 24px rgba(0,0,0,0.06);
         border: 1px solid rgba(0,0,0,0.04);
         transition: all 0.3s ease;
+        overflow: hidden;
     }
     .premium-card:hover {
         box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        transform: translateY(-4px);
     }
 
     /* Product Cards */
     .product-card {
         background: linear-gradient(180deg, #e8f4fc 0%, #d4ecf7 100%);
         border-radius: 16px;
-        padding: 20px;
-        height: 280px;
+        padding: 16px;
+        min-height: 220px;
         cursor: pointer;
         transition: all 0.3s ease;
         border: 1px solid rgba(91, 181, 224, 0.2);
@@ -123,8 +154,8 @@ st.markdown("""
         overflow: hidden;
     }
     .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 16px 40px rgba(91, 181, 224, 0.25);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(91, 181, 224, 0.25);
     }
     .product-card::before {
         content: '';
@@ -144,9 +175,9 @@ st.markdown("""
     .product-badge {
         display: inline-block;
         background: white;
-        padding: 6px 14px;
+        padding: 6px 12px;
         border-radius: 20px;
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         font-weight: 700;
         color: #1a1a1a;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -156,38 +187,40 @@ st.markdown("""
     .fitting-card {
         background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
         border-radius: 16px;
-        padding: 24px;
+        padding: 16px;
         text-align: center;
         border: 1px solid #e8ecef;
         transition: all 0.3s ease;
+        overflow: hidden;
     }
     .fitting-card:hover {
         border-color: #5bb5e0;
         box-shadow: 0 8px 24px rgba(91, 181, 224, 0.15);
     }
     .fitting-label {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: #666;
-        margin-top: 16px;
+        margin-top: 12px;
         font-weight: 600;
     }
 
     /* Info Cards */
     .info-card {
         background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        padding: 24px;
+        padding: 20px;
         border-radius: 16px;
         border-left: 4px solid #f59e0b;
+        overflow: hidden;
     }
     .info-card-title {
         font-weight: 700;
         color: #92400e;
         margin-bottom: 8px;
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
     .info-card-desc {
         color: #78716c;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         line-height: 1.6;
     }
 
@@ -196,9 +229,9 @@ st.markdown("""
         display: inline-block;
         background: linear-gradient(135deg, #10b981 0%, #059669 100%);
         color: white;
-        padding: 12px 28px;
+        padding: 10px 24px;
         border-radius: 30px;
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: 800;
         box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
     }
@@ -206,10 +239,10 @@ st.markdown("""
     /* Footer */
     .footer {
         text-align: center;
-        padding: 48px 20px;
+        padding: 40px 20px;
         color: #888;
         border-top: 1px solid #f0f0f0;
-        margin-top: 80px;
+        margin-top: 60px;
     }
 
     /* Flow Arrow */
@@ -217,6 +250,39 @@ st.markdown("""
         font-size: 2rem;
         color: #5bb5e0;
         margin: 0 16px;
+    }
+
+    /* Hero Section Fix */
+    .hero-section {
+        background: linear-gradient(135deg, #b8dff5 0%, #89c4e8 50%, #5bb5e0 100%);
+        padding: 60px 40px;
+        margin: 0 -2rem;
+        border-radius: 0 0 30px 30px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .step-container {
+            flex-direction: column;
+            gap: 16px;
+        }
+        .step-line {
+            width: 3px;
+            height: 30px;
+            margin: 0;
+        }
+        .step {
+            padding: 8px 0;
+        }
+        .hero-section {
+            padding: 40px 20px;
+        }
+        .premium-card {
+            padding: 16px;
+        }
+        .product-card {
+            min-height: 180px;
+        }
     }
 </style>
 """, unsafe_allow_html=True)
@@ -343,22 +409,18 @@ def render_main_page():
 
     # Hero Section
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #b8dff5 0%, #89c4e8 50%, #5bb5e0 100%);
-                padding: 80px 60px; margin: -1rem -1rem 0 -1rem; border-radius: 0 0 40px 40px;">
-        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <div style="max-width: 500px;">
-                <p style="color: rgba(255,255,255,0.9); font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; margin-bottom: 16px;">
-                    AI-POWERED PET FASHION
-                </p>
-                <h1 style="font-size: 3.2rem; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 24px;">
-                    Dress Your Pup<br>with Style!
-                </h1>
-                <p style="color: rgba(255,255,255,0.95); font-size: 1.1rem; line-height: 1.7; margin-bottom: 32px;">
-                    See how clothes look on your pet before you buy.<br>
-                    AI virtual fitting in seconds.
-                </p>
-            </div>
-            <div style="width: 350px; height: 300px; background: white; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.15);"></div>
+    <div class="hero-section">
+        <div style="max-width: 100%; text-align: center;">
+            <p style="color: rgba(255,255,255,0.9); font-size: 0.85rem; font-weight: 600; letter-spacing: 2px; margin-bottom: 16px;">
+                AI-POWERED PET FASHION
+            </p>
+            <h1 style="font-size: 2.5rem; font-weight: 800; color: white; line-height: 1.2; margin-bottom: 20px;">
+                Dress Your Pup with Style!
+            </h1>
+            <p style="color: rgba(255,255,255,0.95); font-size: 1rem; line-height: 1.7; margin-bottom: 24px;">
+                See how clothes look on your pet before you buy.<br>
+                AI virtual fitting in seconds.
+            </p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -452,16 +514,15 @@ def render_service_page():
     # Title Bar
     st.markdown("""
     <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-                padding: 24px 32px; border-radius: 20px; margin-bottom: 24px;
-                display: flex; justify-content: space-between; align-items: center;">
-        <div style="display: flex; align-items: center; gap: 16px;">
-            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #5bb5e0 0%, #3a9fd1 100%);
-                        border-radius: 16px; display: flex; align-items: center; justify-content: center;">
-                <span style="font-size: 1.5rem;">🐕</span>
+                padding: 20px; border-radius: 16px; margin-bottom: 20px;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <div style="width: 48px; height: 48px; background: linear-gradient(135deg, #5bb5e0 0%, #3a9fd1 100%);
+                        border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <span style="font-size: 1.3rem;">🐕</span>
             </div>
             <div>
-                <h2 style="font-weight: 700; font-size: 1.3rem; margin: 0;">PetFit Virtual Fitting</h2>
-                <p style="color: #666; font-size: 0.9rem; margin: 0;">Try clothes on your pet with AI</p>
+                <h2 style="font-weight: 700; font-size: 1.1rem; margin: 0;">PetFit Virtual Fitting</h2>
+                <p style="color: #666; font-size: 0.85rem; margin: 0;">Try clothes on your pet with AI</p>
             </div>
         </div>
     </div>
@@ -470,16 +531,13 @@ def render_service_page():
     # Pet info display if exists
     if st.session_state.pet_info:
         pet = st.session_state.pet_info
-        col_info, col_reset = st.columns([5, 1])
+        col_info, col_reset = st.columns([4, 1])
         with col_info:
             st.markdown(f"""
-            <div style="background: #f0fdf4; padding: 12px 20px; border-radius: 12px; display: inline-flex; align-items: center; gap: 12px; border: 1px solid #bbf7d0;">
-                <span style="font-size: 1.2rem;">🐕</span>
-                <span style="font-weight: 600;">{pet['name']}</span>
-                <span style="color: #666;">•</span>
-                <span style="color: #666;">Chest {pet['chest']}cm</span>
-                <span style="color: #666;">•</span>
-                <span style="color: #666;">{pet['weight']}kg</span>
+            <div style="background: #f0fdf4; padding: 10px 16px; border-radius: 10px; display: flex; align-items: center; gap: 8px; border: 1px solid #bbf7d0; flex-wrap: wrap;">
+                <span style="font-size: 1rem;">🐕</span>
+                <span style="font-weight: 600; font-size: 0.9rem;">{pet['name']}</span>
+                <span style="color: #666; font-size: 0.85rem;">| {pet['chest']}cm | {pet['weight']}kg</span>
             </div>
             """, unsafe_allow_html=True)
         with col_reset:
@@ -634,11 +692,11 @@ def render_service_page():
                 size, reason = recommend_size(st.session_state.pet_info['chest'])
                 st.markdown(f"""
                 <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-                            padding: 40px; border-radius: 20px; margin-top: 32px; text-align: center;
+                            padding: 30px 20px; border-radius: 16px; margin-top: 24px; text-align: center;
                             border: 1px solid #bbf7d0;">
-                    <p style="font-size: 1rem; color: #166534; margin-bottom: 16px; font-weight: 600;">📏 Recommended Size for {st.session_state.pet_info['name']}</p>
+                    <p style="font-size: 0.9rem; color: #166534; margin-bottom: 12px; font-weight: 600;">📏 Recommended Size for {st.session_state.pet_info['name']}</p>
                     <span class="size-badge">{size}</span>
-                    <p style="color: #15803d; margin-top: 16px; font-size: 1rem;">{reason}</p>
+                    <p style="color: #15803d; margin-top: 12px; font-size: 0.9rem;">{reason}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
@@ -692,10 +750,9 @@ def render_login_page():
     render_header()
 
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #b8dff5 0%, #5bb5e0 100%);
-                padding: 80px 40px; text-align: center; margin: -1rem -1rem 0 -1rem;">
-        <h1 style="font-size: 2.5rem; font-weight: 800; color: white; margin-bottom: 12px;">Welcome to PetFit</h1>
-        <p style="color: rgba(255,255,255,0.9); font-size: 1.1rem;">Virtual fitting for your furry friend</p>
+    <div class="hero-section" style="text-align: center;">
+        <h1 style="font-size: 2.2rem; font-weight: 800; color: white; margin-bottom: 12px;">Welcome to PetFit</h1>
+        <p style="color: rgba(255,255,255,0.9); font-size: 1rem;">Virtual fitting for your furry friend</p>
     </div>
     """, unsafe_allow_html=True)
 
