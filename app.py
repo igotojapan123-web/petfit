@@ -434,13 +434,13 @@ def render_register_page():
         <p style="text-align: center; color: #666; margin-bottom: 32px;">We Are Happy To Help With Your Learning Journey, Lets Dive in By Registering.</p>
         """, unsafe_allow_html=True)
 
-        if st.button("🔍  Continue with Google", key="google_reg", use_container_width=True):
+        if st.button("Continue with Google", key="google_reg", use_container_width=True):
             st.session_state.logged_in = True
             navigate_to('service')
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        if st.button("🍎  Continue with Apple", key="apple_reg", use_container_width=True):
+        if st.button("Continue with Apple", key="apple_reg", use_container_width=True):
             st.session_state.logged_in = True
             navigate_to('service')
 
@@ -504,11 +504,11 @@ def render_login_page():
 
         col_a, col_b = st.columns(2)
         with col_a:
-            if st.button("🔍", key="google_login", use_container_width=True):
+            if st.button("Google", key="google_login", use_container_width=True):
                 st.session_state.logged_in = True
                 navigate_to('service')
         with col_b:
-            if st.button("🍎", key="apple_login", use_container_width=True):
+            if st.button("Apple", key="apple_login", use_container_width=True):
                 st.session_state.logged_in = True
                 navigate_to('service')
 
